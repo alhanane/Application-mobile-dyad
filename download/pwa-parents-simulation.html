@@ -1,0 +1,1354 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#4F46E5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Institution AL HANANE - Application Parents</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    :root {
+      --primary: #4F46E5;
+      --primary-dark: #4338CA;
+      --bg: #F8FAFC;
+      --text: #0F172A;
+      --muted: #64748B;
+      --success: #10B981;
+      --warning: #F59E0B;
+      --error: #EF4444;
+      --border: #E2E8F0;
+      --card: #FFFFFF;
+      --indigo-50: #EEF2FF;
+      --indigo-100: #E0E7FF;
+      --indigo-600: #4F46E5;
+      --indigo-700: #4338CA;
+      --amber-50: #FFFBEB;
+      --amber-100: #FEF3C7;
+      --emerald-50: #ECFDF5;
+      --emerald-100: #D1FAE5;
+      --slate-50: #F8FAFC;
+      --slate-100: #F1F5F9;
+      --slate-200: #E2E8F0;
+      --slate-400: #94A3B8;
+      --slate-500: #64748B;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1E293B;
+      --slate-900: #0F172A;
+    }
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    body { 
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: var(--bg); 
+      color: var(--text); 
+      min-height: 100vh;
+      line-height: 1.5;
+    }
+    
+    /* Utilities */
+    .hidden { display: none !important; }
+    .flex { display: flex; }
+    .flex-col { flex-direction: column; }
+    .items-center { align-items: center; }
+    .justify-center { justify-content: center; }
+    .justify-between { justify-content: space-between; }
+    .gap-1 { gap: 0.25rem; }
+    .gap-2 { gap: 0.5rem; }
+    .gap-3 { gap: 0.75rem; }
+    .gap-4 { gap: 1rem; }
+    .gap-6 { gap: 1.5rem; }
+    .p-3 { padding: 0.75rem; }
+    .p-4 { padding: 1rem; }
+    .p-5 { padding: 1.25rem; }
+    .p-6 { padding: 1.5rem; }
+    .px-4 { padding-left: 1rem; padding-right: 1rem; }
+    .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+    .py-6 { padding-top: 1.5rem; padding-bottom: 1.5rem; }
+    .space-y-2 > * + * { margin-top: 0.5rem; }
+    .space-y-3 > * + * { margin-top: 0.75rem; }
+    .space-y-4 > * + * { margin-top: 1rem; }
+    .space-y-6 > * + * { margin-top: 1.5rem; }
+    .text-center { text-align: center; }
+    .text-xs { font-size: 0.75rem; }
+    .text-sm { font-size: 0.875rem; }
+    .text-lg { font-size: 1.125rem; }
+    .text-xl { font-size: 1.25rem; }
+    .text-2xl { font-size: 1.5rem; }
+    .font-medium { font-weight: 500; }
+    .font-bold { font-weight: 700; }
+    .font-extrabold { font-weight: 800; }
+    .text-slate-400 { color: var(--slate-400); }
+    .text-slate-500 { color: var(--slate-500); }
+    .text-slate-600 { color: var(--slate-600); }
+    .text-slate-700 { color: var(--slate-700); }
+    .text-slate-800 { color: var(--slate-800); }
+    .text-slate-900 { color: var(--slate-900); }
+    .text-indigo-600 { color: var(--indigo-600); }
+    .text-white { color: white; }
+    .bg-white { background: white; }
+    .bg-indigo-600 { background: var(--indigo-600); }
+    .rounded-xl { border-radius: 0.75rem; }
+    .rounded-2xl { border-radius: 1rem; }
+    .rounded-3xl { border-radius: 1.5rem; }
+    .rounded-full { border-radius: 9999px; }
+    .shadow-sm { box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+    .shadow-md { box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+    .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+    .border { border: 1px solid var(--border); }
+    .border-slate-100 { border-color: var(--slate-100); }
+    .border-slate-200 { border-color: var(--slate-200); }
+    .border-indigo-600 { border-color: var(--indigo-600); }
+    .w-full { width: 100%; }
+    .min-h-screen { min-height: 100vh; }
+    .overflow-hidden { overflow: hidden; }
+    .overflow-x-auto { overflow-x: auto; }
+    .relative { position: relative; }
+    .absolute { position: absolute; }
+    .fixed { position: fixed; }
+    .sticky { position: sticky; }
+    .top-0 { top: 0; }
+    .bottom-0 { bottom: 0; }
+    .right-0 { right: 0; }
+    .left-0 { left: 0; }
+    .z-40 { z-index: 40; }
+    .z-50 { z-index: 50; }
+    .max-w-md { max-width: 28rem; }
+    .mx-auto { margin-left: auto; margin-right: auto; }
+    .line-clamp-1 { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; overflow: hidden; }
+    .transition-all { transition: all 0.2s; }
+    .transition-transform { transition: transform 0.2s; }
+    .active\:scale-95:active { transform: scale(0.95); }
+    
+    /* Login Page */
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--slate-50);
+      padding: 1.5rem;
+    }
+    .login-box { width: 100%; max-width: 28rem; }
+    .login-logo {
+      width: 4rem;
+      height: 4rem;
+      border-radius: 1.5rem;
+      background: var(--indigo-600);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+      box-shadow: 0 10px 25px rgba(79, 70, 229, 0.2);
+    }
+    .login-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .login-input {
+      width: 100%;
+      height: 3rem;
+      padding: 0 1rem 0 2.75rem;
+      border: none;
+      border-radius: 0.75rem;
+      background: var(--slate-50);
+      font-size: 1rem;
+      outline: none;
+    }
+    .login-input:focus { box-shadow: 0 0 0 2px var(--indigo-600); }
+    .login-input-wrapper { position: relative; }
+    .login-input-icon {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--slate-400);
+    }
+    .login-btn {
+      width: 100%;
+      height: 3rem;
+      background: var(--indigo-600);
+      color: white;
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .login-btn:hover { background: var(--indigo-700); }
+    .login-error {
+      background: #FEE2E2;
+      border: 1px solid #FECACA;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      color: #B91C1C;
+      font-size: 0.875rem;
+    }
+    
+    /* App Layout */
+    .app-container {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      max-width: 28rem;
+      margin: 0 auto;
+      background: var(--slate-50);
+      border-left: 1px solid var(--border);
+      border-right: 1px solid var(--border);
+      box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+      position: relative;
+    }
+    
+    /* Header */
+    .app-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--slate-100);
+      padding: 0.75rem 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .header-menu-btn {
+      padding: 0.5rem;
+      background: transparent;
+      border: none;
+      border-radius: 0.75rem;
+      cursor: pointer;
+      color: var(--slate-600);
+    }
+    .header-menu-btn:hover { background: var(--slate-100); }
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .header-logo-icon {
+      width: 2rem;
+      height: 2rem;
+      background: var(--indigo-600);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+    
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-width: 28rem;
+      margin: 0 auto;
+      background: rgba(255,255,255,0.8);
+      backdrop-filter: blur(12px);
+      border-top: 1px solid var(--slate-200);
+      padding: 0.75rem 1.5rem;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      z-index: 50;
+    }
+    .nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--slate-400);
+      transition: all 0.2s;
+    }
+    .nav-item.active { color: var(--indigo-600); transform: scale(1.1); }
+    .nav-item:hover { color: var(--slate-600); }
+    .nav-item span { font-size: 0.625rem; font-weight: 500; }
+    
+    /* Main Content */
+    .app-main {
+      flex: 1;
+      padding-bottom: 5rem;
+      overflow-y: auto;
+    }
+    
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      border: none;
+    }
+    .card-clickable {
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .card-clickable:hover { background: var(--slate-50); }
+    .card-clickable:active { transform: scale(0.98); }
+    
+    /* Badge */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.5rem;
+      border-radius: 9999px;
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .badge-indigo { background: var(--indigo-100); color: var(--indigo-700); }
+    .badge-amber { background: var(--amber-100); color: #B45309; }
+    .badge-emerald { background: var(--emerald-100); color: #047857; }
+    .badge-white { background: rgba(255,255,255,0.9); color: var(--indigo-600); }
+    
+    /* Child Avatar */
+    .child-avatar {
+      width: 3rem;
+      height: 3rem;
+      border-radius: 50%;
+      border: 2px solid var(--indigo-600);
+      object-fit: cover;
+      background: var(--slate-100);
+    }
+    
+    /* Stat Card */
+    .stat-card {
+      background: var(--indigo-100);
+      border: 1px solid #C7D2FE;
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    .stat-card:active { transform: scale(0.95); }
+    .stat-icon {
+      width: 1.75rem;
+      height: 1.75rem;
+      background: rgba(255,255,255,0.9);
+      border-radius: 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 0.5rem;
+    }
+    .stat-label { font-size: 0.5rem; font-weight: 700; text-transform: uppercase; color: var(--slate-800); }
+    .stat-value { font-size: 1.25rem; font-weight: 800; color: var(--slate-900); }
+    
+    /* Update Card */
+    .update-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      background: white;
+      border-radius: 1rem;
+      border: 1px solid var(--slate-100);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      cursor: pointer;
+      transition: all 0.2s;
+      width: 100%;
+      text-align: left;
+    }
+    .update-card:hover { background: var(--slate-50); }
+    .update-icon {
+      padding: 0.75rem;
+      border-radius: 0.75rem;
+    }
+    .update-icon.indigo { background: var(--indigo-50); color: var(--indigo-600); }
+    .update-icon.amber { background: var(--amber-50); color: var(--warning); }
+    .update-icon.emerald { background: var(--emerald-50); color: var(--success); }
+    
+    /* Info/News Card */
+    .content-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+      overflow: hidden;
+      border: none;
+    }
+    .content-card-image {
+      width: 100%;
+      height: 12rem;
+      object-fit: cover;
+      transition: transform 0.5s;
+    }
+    .content-card:hover .content-card-image { transform: scale(1.05); }
+    .content-card-body { padding: 1.25rem; }
+    .content-card-date {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      color: var(--slate-400);
+      font-weight: 500;
+    }
+    .content-card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--slate-900);
+      line-height: 1.3;
+      margin-top: 0.5rem;
+    }
+    .content-card-desc {
+      font-size: 0.875rem;
+      color: var(--slate-600);
+      line-height: 1.6;
+      margin-top: 0.5rem;
+    }
+    .content-card-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+    .content-card-btn {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.625rem;
+      border-radius: 0.75rem;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    }
+    .content-card-btn.primary { background: var(--indigo-50); color: var(--indigo-600); }
+    .content-card-btn.primary:hover { background: var(--indigo-100); }
+    .content-card-btn.secondary { background: var(--slate-50); color: var(--slate-600); }
+    .content-card-btn.secondary:hover { background: var(--slate-100); }
+    
+    /* Request Card */
+    .request-card {
+      border-radius: 1rem;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      overflow: hidden;
+      padding: 1.25rem;
+      border: none;
+    }
+    .request-card.pending { background: rgba(255,251,235,0.7); border: 1px solid #FDE68A; }
+    .request-card.completed { background: rgba(224,231,255,0.7); border: 1px solid #C7D2FE; }
+    
+    /* Profile */
+    .profile-avatar {
+      width: 6rem;
+      height: 6rem;
+      border-radius: 50%;
+      border: 4px solid white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      object-fit: cover;
+    }
+    .profile-input {
+      width: 100%;
+      height: 2.5rem;
+      padding: 0 0.75rem;
+      background: var(--slate-50);
+      border: none;
+      border-radius: 0.5rem;
+      font-size: 0.875rem;
+    }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+    }
+    .modal-content {
+      background: white;
+      width: 100%;
+      max-width: 28rem;
+      border-radius: 1.5rem 1.5rem 0 0;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--slate-100);
+    }
+    .modal-body { padding: 1.5rem; }
+    .modal-title { font-size: 1.25rem; font-weight: 700; color: var(--slate-900); }
+    
+    /* Select */
+    .custom-select {
+      width: 100%;
+      height: 3rem;
+      padding: 0 1rem;
+      background: var(--slate-50);
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364748B' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+    }
+    
+    /* Textarea */
+    .custom-textarea {
+      width: 100%;
+      min-height: 7.5rem;
+      padding: 1rem;
+      background: var(--slate-50);
+      border: none;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      resize: none;
+      font-family: inherit;
+    }
+    
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--slate-800);
+      color: white;
+      padding: 0.75rem 1.25rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      z-index: 200;
+      animation: slideUp 0.3s ease-out;
+    }
+    @keyframes slideUp {
+      from { transform: translateX(-50%) translateY(100%); opacity: 0; }
+      to { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+    
+    /* Sidebar */
+    .sidebar-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+    }
+    .sidebar {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 18.75rem;
+      background: white;
+      z-index: 101;
+      transform: translateX(-100%);
+      transition: transform 0.3s;
+    }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--slate-100);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .sidebar-logo {
+      padding: 0.5rem;
+      background: var(--indigo-600);
+      border-radius: 0.5rem;
+      color: white;
+    }
+    .sidebar-section {
+      padding: 0.5rem;
+    }
+    .sidebar-section-title {
+      padding: 0.5rem 0.75rem;
+      font-size: 0.625rem;
+      font-weight: 700;
+      color: var(--slate-400);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.625rem 0.75rem;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--slate-600);
+      cursor: pointer;
+      transition: all 0.2s;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+    }
+    .sidebar-item:hover { background: var(--slate-50); color: var(--slate-900); }
+    .sidebar-item.active { background: var(--indigo-50); color: var(--indigo-600); }
+    .sidebar-item.logout { color: #DC2626; }
+    .sidebar-item.logout:hover { background: #FEE2E2; }
+    
+    /* PWA Install Banner */
+    .pwa-banner {
+      position: fixed;
+      bottom: 5rem;
+      left: 0;
+      right: 0;
+      max-width: 28rem;
+      margin: 0 auto;
+      background: linear-gradient(135deg, var(--indigo-600), var(--indigo-700));
+      color: white;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin-bottom: 1rem;
+      z-index: 60;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 10px 25px rgba(79,70,229,0.3);
+    }
+    .pwa-banner-btn {
+      background: white;
+      color: var(--indigo-600);
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 0.5rem;
+      font-weight: 700;
+      font-size: 0.75rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .pwa-banner-close {
+      background: transparent;
+      border: none;
+      color: white;
+      opacity: 0.7;
+      cursor: pointer;
+      padding: 0.25rem;
+    }
+    
+    /* Notification dot */
+    .notif-dot {
+      position: absolute;
+      top: 0.5rem;
+      right: 0.5rem;
+      width: 0.5rem;
+      height: 0.5rem;
+      background: var(--error);
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast -->
+  <div id="toast" class="toast hidden"></div>
+  
+  <!-- PWA Install Banner -->
+  <div id="pwa-banner" class="pwa-banner hidden">
+    <div style="flex: 1;">
+      <div style="font-weight: 700; font-size: 0.875rem;">Installer l'application</div>
+      <div style="font-size: 0.75rem; opacity: 0.9;">Ajoutez un raccourci sur votre écran</div>
+    </div>
+    <button class="pwa-banner-btn" onclick="installPWA()">Installer</button>
+    <button class="pwa-banner-close" onclick="closePWABanner()">✕</button>
+  </div>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebar-overlay" class="sidebar-overlay hidden" onclick="closeSidebar()"></div>
+  
+  <!-- Sidebar -->
+  <div id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-logo">🎓</div>
+      <div>
+        <div style="font-weight: 700; font-size: 1.125rem; color: var(--indigo-600);">Institution AL HANANE</div>
+      </div>
+    </div>
+    <div style="padding: 1rem; overflow-y: auto; height: calc(100% - 80px);">
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Général</div>
+        <button class="sidebar-item active" onclick="navigate('home')">🏠 Accueil</button>
+        <button class="sidebar-item" onclick="navigate('info')">ℹ️ Notes d'information</button>
+        <button class="sidebar-item" onclick="navigate('news')">📰 Actualités</button>
+        <button class="sidebar-item" onclick="navigate('contact')">📞 Contact</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Communication</div>
+        <button class="sidebar-item" onclick="navigate('messages')">💬 Mes demandes</button>
+      </div>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Compte</div>
+        <button class="sidebar-item" onclick="navigate('profile')">👤 Mon compte</button>
+        <button class="sidebar-item logout" onclick="logout()">🚪 Déconnexion</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login View -->
+  <div id="login-view" class="login-container">
+    <div class="login-box">
+      <div class="text-center space-y-3">
+        <div class="login-logo">🎓</div>
+        <div>
+          <h1 class="text-2xl font-extrabold text-slate-900">Institution AL HANANE</h1>
+          <p class="text-sm text-slate-500">Connexion Parent</p>
+        </div>
+      </div>
+      
+      <div class="login-card">
+        <form id="login-form" class="space-y-5">
+          <div class="space-y-2">
+            <label class="text-xs font-bold uppercase text-slate-400">Login</label>
+            <div class="login-input-wrapper">
+              <span class="login-input-icon">👤</span>
+              <input type="text" id="username" class="login-input" placeholder="Ex: parent.pere" required>
+            </div>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="text-xs font-bold uppercase text-slate-400">Mot de passe</label>
+            <div class="login-input-wrapper">
+              <span class="login-input-icon">🔒</span>
+              <input type="password" id="password" class="login-input" placeholder="••••••" required>
+            </div>
+          </div>
+          
+          <div id="login-error" class="login-error hidden"></div>
+          
+          <button type="submit" class="login-btn">Se connecter</button>
+          
+          <button type="button" onclick="fillDemo()" class="w-full text-xs font-bold text-indigo-700" style="background: none; border: none; cursor: pointer;">
+            Utiliser les identifiants de démo
+          </button>
+          
+          <p class="text-xs text-slate-500 text-center">
+            Les identifiants sont fournis par le service informatique et envoyés par SMS en début d'année scolaire.
+          </p>
+        </form>
+      </div>
+      
+      <div class="text-center text-xs text-slate-400 mt-6">
+        Démo : <strong>parent.pere</strong> / <strong>123456</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- App View -->
+  <div id="app-view" class="app-container hidden">
+    <!-- Header -->
+    <header class="app-header">
+      <button class="header-menu-btn" onclick="openSidebar()">☰</button>
+      <div class="header-logo">
+        <div class="header-logo-icon">🎓</div>
+        <span class="font-bold text-slate-800">AL HANANE</span>
+      </div>
+      <div style="width: 2.5rem;"></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-main">
+      <!-- Home View -->
+      <div id="home-view" class="p-6 space-y-6">
+        <div class="flex justify-between items-start">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Bonjour, M. Martin</h1>
+            <p class="text-slate-500 text-sm">Institution AL HANANE</p>
+          </div>
+          <button class="p-2 bg-white rounded-full shadow-sm border border-slate-100 relative">
+            <span style="font-size: 1.25rem;">🔔</span>
+            <span class="notif-dot"></span>
+          </button>
+        </div>
+
+        <!-- Children -->
+        <div class="space-y-3">
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-widest">Mes Enfants</h2>
+          <div class="flex gap-4 overflow-x-auto" style="padding-bottom: 0.5rem;">
+            <div class="flex flex-col items-center gap-2" style="min-width: 6.25rem;">
+              <div class="p-1 rounded-full border-2 border-indigo-600 shadow-sm">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Lucas" alt="Lucas" class="child-avatar">
+              </div>
+              <div class="text-center">
+                <p class="text-xs font-bold text-slate-800">Lucas</p>
+                <p class="text-xs font-medium text-indigo-600">CE2/D</p>
+              </div>
+            </div>
+            <div class="flex flex-col items-center gap-2" style="min-width: 6.25rem;">
+              <div class="p-1 rounded-full border-2 border-slate-200 shadow-sm">
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Emma" alt="Emma" class="child-avatar" style="border-color: var(--slate-200);">
+              </div>
+              <div class="text-center">
+                <p class="text-xs font-bold text-slate-800">Emma</p>
+                <p class="text-xs font-medium text-indigo-600">CM2/E</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="grid grid-cols-3 gap-3">
+          <div class="stat-card" onclick="navigate('info')">
+            <div class="stat-icon" style="color: var(--indigo-600);">ℹ️</div>
+            <div>
+              <p class="stat-label">Notes d'info</p>
+              <p class="stat-value">3</p>
+            </div>
+          </div>
+          <div class="stat-card" onclick="navigate('news')">
+            <div class="stat-icon" style="color: var(--warning);">📰</div>
+            <div>
+              <p class="stat-label">Actualités</p>
+              <p class="stat-value">1</p>
+            </div>
+          </div>
+          <div class="stat-card" onclick="navigate('messages')">
+            <div class="stat-icon" style="color: var(--success);">⏳</div>
+            <div>
+              <p class="stat-label">Demandes</p>
+              <p class="stat-value">1</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Latest Updates -->
+        <div class="space-y-4">
+          <h2 class="text-lg font-bold text-slate-800">Dernières publications</h2>
+          
+          <button class="update-card" onclick="navigate('info')">
+            <div class="update-icon indigo">📄</div>
+            <div style="flex: 1;">
+              <div class="flex justify-between items-center gap-2">
+                <span class="badge badge-indigo">Note d'info</span>
+                <span class="text-xs text-slate-400 font-medium">01 Sept</span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm line-clamp-1 mt-1">Règlement Intérieur 2023-2024</h3>
+            </div>
+            <span style="color: var(--slate-300);">›</span>
+          </button>
+          
+          <button class="update-card" onclick="navigate('news')">
+            <div class="update-icon amber">📰</div>
+            <div style="flex: 1;">
+              <div class="flex justify-between items-center gap-2">
+                <span class="badge badge-amber">Actualité</span>
+                <span class="text-xs text-slate-400 font-medium">15 Oct</span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm line-clamp-1 mt-1">Sortie scolaire au Musée d'Orsay</h3>
+            </div>
+            <span style="color: var(--slate-300);">›</span>
+          </button>
+          
+          <button class="update-card" onclick="navigate('messages')">
+            <div class="update-icon emerald">💬</div>
+            <div style="flex: 1;">
+              <div class="flex justify-between items-center gap-2">
+                <span class="badge badge-emerald">Ma demande</span>
+                <span class="badge badge-amber">En attente</span>
+              </div>
+              <h3 class="font-bold text-slate-900 text-sm line-clamp-1 mt-1">Attestation de scolarité</h3>
+            </div>
+            <span style="color: var(--slate-300);">›</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Info Notes View -->
+      <div id="info-view" class="hidden p-6 space-y-6">
+        <div class="flex items-center gap-4">
+          <button onclick="navigate('home')" class="p-2 bg-white rounded-full shadow-sm border border-slate-100">←</button>
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Notes d'information</h1>
+            <p class="text-slate-500 text-sm">Documents et notes administratives</p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <!-- Note 1 -->
+          <div class="content-card">
+            <div class="relative overflow-hidden" style="height: 12rem;">
+              <img src="https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=400" class="content-card-image" alt="Règlement">
+              <span class="badge badge-white absolute" style="top: 1rem; left: 1rem;">Administratif</span>
+            </div>
+            <div class="content-card-body">
+              <div class="content-card-date">📅 01 Sept 2023</div>
+              <h2 class="content-card-title">Règlement Intérieur 2023-2024</h2>
+              <p class="content-card-desc">Consultez la mise à jour du règlement intérieur de l'établissement pour la nouvelle année scolaire.</p>
+              <div class="content-card-actions">
+                <button class="content-card-btn primary">📄 Télécharger PDF</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Note 2 -->
+          <div class="content-card">
+            <div class="relative overflow-hidden" style="height: 12rem;">
+              <img src="https://images.unsplash.com/photo-1506784983877-45594efa4cbe?w=400" class="content-card-image" alt="Calendrier">
+              <span class="badge badge-white absolute" style="top: 1rem; left: 1rem;">Calendrier</span>
+            </div>
+            <div class="content-card-body">
+              <div class="content-card-date">📅 05 Sept 2023</div>
+              <h2 class="content-card-title">Calendrier des Vacances Scolaires</h2>
+              <p class="content-card-desc">Retrouvez toutes les dates des vacances scolaires pour la zone C.</p>
+              <div class="content-card-actions">
+                <button class="content-card-btn secondary">🔗 Consulter</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Note 3 -->
+          <div class="content-card">
+            <div class="relative overflow-hidden" style="height: 12rem;">
+              <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?w=400" class="content-card-image" alt="Sécurité">
+              <span class="badge badge-white absolute" style="top: 1rem; left: 1rem;">Sécurité</span>
+            </div>
+            <div class="content-card-body">
+              <div class="content-card-date">📅 10 Sept 2023</div>
+              <h2 class="content-card-title">Plan de Sécurité (PPMS)</h2>
+              <p class="content-card-desc">Information aux familles concernant les exercices de sécurité.</p>
+              <div class="content-card-actions">
+                <button class="content-card-btn primary">📄 Télécharger PDF</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News View -->
+      <div id="news-view" class="hidden p-6 space-y-6">
+        <div class="flex items-center gap-4">
+          <button onclick="navigate('home')" class="p-2 bg-white rounded-full shadow-sm border border-slate-100">←</button>
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Actualités</h1>
+            <p class="text-slate-500 text-sm">La vie de l'établissement</p>
+          </div>
+        </div>
+
+        <div class="space-y-6">
+          <!-- News 1 -->
+          <div class="content-card">
+            <div class="relative overflow-hidden" style="height: 12rem;">
+              <img src="https://images.unsplash.com/photo-1544531585-9847b68c8c86?w=400" class="content-card-image" alt="Musée">
+              <span class="badge badge-white absolute" style="top: 1rem; left: 1rem;">Événement</span>
+            </div>
+            <div class="content-card-body">
+              <div class="content-card-date">📅 15 Oct 2023</div>
+              <h2 class="content-card-title">Sortie scolaire au Musée d'Orsay</h2>
+              <p class="content-card-desc">Les classes de 3ème participeront à une visite guidée sur l'impressionnisme. Le départ est prévu à 8h30.</p>
+              <div class="content-card-actions">
+                <button class="content-card-btn primary">📄 Document PDF</button>
+                <button class="content-card-btn secondary">🔗 Voir le lien</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- News 2 -->
+          <div class="content-card">
+            <div class="relative overflow-hidden" style="height: 12rem;">
+              <img src="https://images.unsplash.com/photo-1577896851231-70ef18881754?w=400" class="content-card-image" alt="Réunion">
+              <span class="badge badge-white absolute" style="top: 1rem; left: 1rem;">Information</span>
+            </div>
+            <div class="content-card-body">
+              <div class="content-card-date">📅 12 Oct 2023</div>
+              <h2 class="content-card-title">Réunion Parents-Professeurs</h2>
+              <p class="content-card-desc">La première réunion de l'année se tiendra dans l'amphithéâtre.</p>
+              <div class="content-card-actions">
+                <button class="content-card-btn primary">📄 Document PDF</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- News 3 -->
+          <div class="content-card">
+            <div class="relative overflow-hidden" style="height: 12rem;">
+              <img src="https://images.unsplash.com/photo-1466692476868-aef1dfb1e735?w=400" class="content-card-image" alt="Jardin">
+              <span class="badge badge-white absolute" style="top: 1rem; left: 1rem;">Pédagogie</span>
+            </div>
+            <div class="content-card-body">
+              <div class="content-card-date">📅 08 Oct 2023</div>
+              <h2 class="content-card-title">Nouveau projet : Jardin Partagé</h2>
+              <p class="content-card-desc">L'école lance un projet de jardinage éco-responsable.</p>
+              <div class="content-card-actions">
+                <button class="content-card-btn secondary">🔗 Voir le lien</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Messages View -->
+      <div id="messages-view" class="hidden p-6 space-y-6">
+        <div class="flex justify-between items-center">
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Mes demandes</h1>
+            <p class="text-slate-500 text-sm">Suivi de vos requêtes administratives</p>
+          </div>
+          <button onclick="openNewRequestModal()" class="p-3 bg-indigo-600 text-white rounded-2xl shadow-lg active:scale-95 transition-transform">+</button>
+        </div>
+
+        <div class="space-y-4">
+          <!-- Request 1 - Pending -->
+          <div class="request-card pending">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex items-center gap-3">
+                <div class="p-2.5 rounded-xl text-white shadow-sm" style="background: var(--warning);">📄</div>
+                <div>
+                  <h3 class="font-bold text-slate-900">Attestation de scolarité</h3>
+                  <div class="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                    <span>12 Oct 2023</span>
+                    <span>•</span>
+                    <span>👤 Lucas</span>
+                  </div>
+                </div>
+              </div>
+              <span class="badge badge-amber">En attente</span>
+            </div>
+            <p class="text-sm p-3 rounded-xl italic bg-white/70 text-slate-700 mt-4">"Demande pour Lucas (CE2/D)"</p>
+          </div>
+
+          <!-- Request 2 - Completed -->
+          <div class="request-card completed">
+            <div class="flex justify-between items-start gap-3">
+              <div class="flex items-center gap-3">
+                <div class="p-2.5 rounded-xl text-white shadow-sm" style="background: var(--indigo-600);">📄</div>
+                <div>
+                  <h3 class="font-bold text-slate-900">Facture frais de scolarité</h3>
+                  <div class="flex items-center gap-2 text-xs text-slate-600 font-medium">
+                    <span>05 Oct 2023</span>
+                    <span>•</span>
+                    <span>👤 Emma</span>
+                  </div>
+                </div>
+              </div>
+              <span class="badge badge-emerald">Terminée</span>
+            </div>
+            <p class="text-sm p-3 rounded-xl italic bg-white/70 text-slate-700 mt-4">"Mois d'Octobre - Emma"</p>
+            <div class="border-t border-indigo-200 pt-4 mt-4 space-y-3">
+              <div class="flex items-start gap-2">
+                <div class="bg-indigo-600 text-white p-1.5 rounded-lg">💬</div>
+                <div style="flex: 1;">
+                  <p class="text-xs font-bold text-indigo-950 mb-1">Réponse de l'école :</p>
+                  <p class="text-xs leading-relaxed font-medium text-slate-700">Votre facture est disponible en pièce jointe.</p>
+                </div>
+              </div>
+              <button class="w-full flex items-center justify-between p-3 bg-white/70 rounded-xl border border-dashed border-indigo-300">
+                <div class="flex items-center gap-2">
+                  <span style="color: var(--indigo-600);">📎</span>
+                  <span class="text-xs font-bold text-indigo-700">Facture_OCT_2023.pdf</span>
+                </div>
+                <span style="color: var(--slate-400);">›</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile View -->
+      <div id="profile-view" class="hidden p-6 space-y-8">
+        <div class="text-center space-y-4">
+          <div class="flex items-center justify-center gap-4">
+            <div class="relative inline-block">
+              <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Parent" class="profile-avatar" alt="Avatar">
+              <button class="absolute bottom-0 right-0 bg-indigo-600 text-white p-2 rounded-full border-2 border-white shadow-lg">📷</button>
+            </div>
+            <button onclick="logout()" class="rounded-full bg-slate-700 text-white shadow-sm flex items-center justify-center" style="width: 2.75rem; height: 2.75rem;">🚪</button>
+          </div>
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">M. Jean Martin</h1>
+            <p class="text-slate-500 text-sm font-medium">Parent d'élève • Institution AL HANANE</p>
+          </div>
+        </div>
+
+        <div class="card p-6 space-y-4">
+          <h3 class="font-bold text-slate-800 flex items-center gap-2 mb-2">Informations Personnelles</h3>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="text-xs text-slate-400 uppercase font-bold">Prénom</label>
+              <input type="text" value="Jean" class="profile-input">
+            </div>
+            <div class="space-y-2">
+              <label class="text-xs text-slate-400 uppercase font-bold">Nom</label>
+              <input type="text" value="Martin" class="profile-input">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-xs text-slate-400 uppercase font-bold">N° CIN</label>
+            <input type="text" value="AB123456" class="profile-input">
+          </div>
+
+          <div class="grid grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="text-xs text-slate-400 uppercase font-bold">N° GSM</label>
+              <input type="text" value="06 12 34 56 78" class="profile-input">
+            </div>
+            <div class="space-y-2">
+              <label class="text-xs text-slate-400 uppercase font-bold">Tél. Domicile</label>
+              <input type="text" value="05 22 33 44 55" class="profile-input">
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <label class="text-xs text-slate-400 uppercase font-bold">Adresse</label>
+            <input type="text" value="123 Rue des Lilas, Casablanca" class="profile-input">
+          </div>
+
+          <button onclick="saveProfile()" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-xl flex items-center justify-center gap-2 mt-2">
+            💾 Enregistrer les modifications
+          </button>
+        </div>
+      </div>
+
+      <!-- Contact View -->
+      <div id="contact-view" class="hidden p-6 space-y-6">
+        <div class="flex items-center gap-4">
+          <button onclick="navigate('home')" class="p-2 bg-white rounded-full shadow-sm border border-slate-100">←</button>
+          <div>
+            <h1 class="text-2xl font-bold text-slate-900">Contact</h1>
+            <p class="text-slate-500 text-sm">Contacter l'établissement</p>
+          </div>
+        </div>
+
+        <div class="card p-6 space-y-4">
+          <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl">
+            <div class="p-3 bg-indigo-100 rounded-xl">📞</div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase font-bold">Téléphone</p>
+              <p class="font-bold text-slate-900">05 22 XX XX XX</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl">
+            <div class="p-3 bg-indigo-100 rounded-xl">📧</div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase font-bold">Email</p>
+              <p class="font-bold text-slate-900">contact@alhanane.ma</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl">
+            <div class="p-3 bg-indigo-100 rounded-xl">📍</div>
+            <div>
+              <p class="text-xs text-slate-400 uppercase font-bold">Adresse</p>
+              <p class="font-bold text-slate-900">123 Avenue Mohammed V, Casablanca</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+      <button class="nav-item active" onclick="navigate('home')" data-nav="home">
+        <span style="font-size: 1.25rem;">🏠</span>
+        <span>Accueil</span>
+      </button>
+      <button class="nav-item" onclick="navigate('messages')" data-nav="messages">
+        <span style="font-size: 1.25rem;">💬</span>
+        <span>Demandes</span>
+      </button>
+      <button class="nav-item" onclick="navigate('info')" data-nav="info">
+        <span style="font-size: 1.25rem;">ℹ️</span>
+        <span>Infos</span>
+      </button>
+      <button class="nav-item" onclick="navigate('contact')" data-nav="contact">
+        <span style="font-size: 1.25rem;">📞</span>
+        <span>Contact</span>
+      </button>
+      <button class="nav-item" onclick="navigate('profile')" data-nav="profile">
+        <span style="font-size: 1.25rem;">👤</span>
+        <span>Compte</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- New Request Modal -->
+  <div id="request-modal" class="modal-overlay hidden" onclick="closeRequestModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+      <div class="modal-header">
+        <h2 class="modal-title">Nouvelle demande</h2>
+      </div>
+      <form id="request-form" class="modal-body space-y-6">
+        <div class="space-y-2">
+          <label class="text-xs font-bold uppercase text-slate-400">Enfant concerné</label>
+          <select class="custom-select" id="request-child" required>
+            <option value="">Sélectionner un enfant</option>
+            <option value="1">Lucas (CE2/D)</option>
+            <option value="2">Emma (CM2/E)</option>
+          </select>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs font-bold uppercase text-slate-400">Type de demande</label>
+          <select class="custom-select" id="request-type" required>
+            <option value="">Choisir le type</option>
+            <option value="attestation">Attestation de scolarité</option>
+            <option value="facture">Facture frais de scolarité</option>
+            <option value="certificat">Certificat de départ</option>
+            <option value="autre">Autre</option>
+          </select>
+        </div>
+
+        <div class="space-y-2">
+          <label class="text-xs font-bold uppercase text-slate-400">Message / Précisions</label>
+          <textarea class="custom-textarea" id="request-message" placeholder="Détaillez votre demande ici..."></textarea>
+        </div>
+
+        <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2">
+          📤 Envoyer la demande
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    const data = {
+      isLoggedIn: false,
+      currentView: 'home',
+      children: [
+        { id: '1', name: 'Lucas', class: 'CE2/D' },
+        { id: '2', name: 'Emma', class: 'CM2/E' }
+      ],
+      requests: [
+        { id: 1, type: 'Attestation de scolarité', date: '12 Oct 2023', status: 'pending', child: 'Lucas', description: 'Demande pour Lucas (CE2/D)' },
+        { id: 2, type: 'Facture frais de scolarité', date: '05 Oct 2023', status: 'completed', child: 'Emma', description: "Mois d'Octobre - Emma", response: 'Votre facture est disponible en pièce jointe.' }
+      ]
+    };
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (username === 'parent.pere' && password === '123456') {
+        data.isLoggedIn = true;
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('app-view').classList.remove('hidden');
+        showToast('Connexion réussie !');
+        
+        // Show PWA banner after 2 seconds
+        setTimeout(() => {
+          document.getElementById('pwa-banner').classList.remove('hidden');
+        }, 2000);
+      } else {
+        const errorEl = document.getElementById('login-error');
+        errorEl.textContent = 'Identifiants incorrects. Vérifiez le login et le mot de passe reçus par SMS.';
+        errorEl.classList.remove('hidden');
+      }
+    });
+
+    function fillDemo() {
+      document.getElementById('username').value = 'parent.pere';
+      document.getElementById('password').value = '123456';
+      document.getElementById('login-error').classList.add('hidden');
+    }
+
+    // Navigation
+    function navigate(view) {
+      data.currentView = view;
+      
+      // Hide all views
+      document.querySelectorAll('[id$="-view"]').forEach(el => {
+        if (el.id !== 'login-view' && el.id !== 'app-view') {
+          el.classList.add('hidden');
+        }
+      });
+      
+      // Show selected view
+      const viewEl = document.getElementById(`${view}-view`);
+      if (viewEl) viewEl.classList.remove('hidden');
+      
+      // Update bottom nav
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.toggle('active', item.dataset.nav === view);
+      });
+      
+      // Close sidebar
+      closeSidebar();
+    }
+
+    // Sidebar
+    function openSidebar() {
+      document.getElementById('sidebar').classList.add('open');
+      document.getElementById('sidebar-overlay').classList.remove('hidden');
+    }
+
+    function closeSidebar() {
+      document.getElementById('sidebar').classList.remove('open');
+      document.getElementById('sidebar-overlay').classList.add('hidden');
+    }
+
+    // Logout
+    function logout() {
+      data.isLoggedIn = false;
+      document.getElementById('app-view').classList.add('hidden');
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      closeSidebar();
+      showToast('Déconnexion réussie');
+    }
+
+    // Modal
+    function openNewRequestModal() {
+      document.getElementById('request-modal').classList.remove('hidden');
+    }
+
+    function closeRequestModal(e) {
+      if (e.target.id === 'request-modal') {
+        document.getElementById('request-modal').classList.add('hidden');
+      }
+    }
+
+    // Request form
+    document.getElementById('request-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const child = document.getElementById('request-child');
+      const type = document.getElementById('request-type');
+      const message = document.getElementById('request-message');
+      
+      showToast('Votre demande a été envoyée avec succès');
+      document.getElementById('request-modal').classList.add('hidden');
+      
+      // Reset form
+      child.value = '';
+      type.value = '';
+      message.value = '';
+    });
+
+    // Profile
+    function saveProfile() {
+      showToast('Informations mises à jour avec succès');
+    }
+
+    // PWA
+    function installPWA() {
+      showToast('Application installée !');
+      document.getElementById('pwa-banner').classList.add('hidden');
+    }
+
+    function closePWABanner() {
+      document.getElementById('pwa-banner').classList.add('hidden');
+    }
+
+    // Toast
+    function showToast(message) {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.classList.remove('hidden');
+      setTimeout(() => toast.classList.add('hidden'), 3000);
+    }
+  </script>
+</body>
+</html>

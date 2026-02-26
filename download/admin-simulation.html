@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Back-Office Admin - Institution Al Hanane</title>
+  <style>
+    :root {
+      --primary: #5B56F6;
+      --primary-dark: #7C3AED;
+      --bg: #F6F5FF;
+      --text: #1E1B4B;
+      --muted: #6B7280;
+      --success: #22C55E;
+      --warning: #F59E0B;
+      --error: #DC2626;
+      --border: #E5E7EB;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+    
+    /* Login */
+    .login-container {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #F6F5FF 0%, #E8E6FF 100%);
+      padding: 1rem;
+    }
+    .login-box {
+      background: white;
+      border-radius: 24px;
+      padding: 2.5rem;
+      box-shadow: 0 25px 50px rgba(30, 27, 75, 0.15);
+      max-width: 400px;
+      width: 100%;
+    }
+    .logo {
+      width: 60px;
+      height: 60px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      margin: 0 auto 1rem;
+    }
+    .login-title { font-size: 1.5rem; font-weight: 700; text-align: center; margin-bottom: 0.5rem; }
+    .login-subtitle { color: var(--muted); text-align: center; margin-bottom: 2rem; font-size: 0.875rem; }
+    
+    .form-group { margin-bottom: 1rem; }
+    .form-label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--text); margin-bottom: 0.5rem; }
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      font-size: 1rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus { border-color: var(--primary); }
+    .form-textarea { min-height: 120px; resize: vertical; }
+    .form-select { cursor: pointer; }
+    
+    .btn {
+      padding: 0.875rem 1.5rem;
+      border-radius: 12px;
+      border: none;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+    }
+    .btn-secondary {
+      background: white;
+      border: 2px solid var(--border);
+      color: var(--text);
+    }
+    .btn-success { background: linear-gradient(135deg, #22C55E, #16A34A); color: white; }
+    .btn-sm { padding: 0.5rem 1rem; font-size: 0.875rem; }
+    .btn-icon { padding: 0.5rem; border-radius: 8px; background: #F3F4F6; }
+    
+    .login-hint {
+      text-align: center;
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+      color: #9CA3AF;
+    }
+    
+    /* Admin Layout */
+    .admin-container { min-height: 100vh; }
+    .admin-header {
+      background: white;
+      border-bottom: 1px solid rgba(30, 27, 75, 0.1);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .admin-brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .admin-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    }
+    .admin-title { font-size: 1rem; font-weight: 700; }
+    .admin-subtitle { font-size: 0.75rem; color: var(--muted); }
+    .admin-nav { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .nav-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 999px;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .nav-btn.active { background: rgba(91, 86, 246, 0.1); color: var(--primary); }
+    .nav-btn.logout { background: #FEE2E2; color: var(--error); }
+    
+    .admin-main { padding: 1.5rem; max-width: 1400px; margin: 0 auto; }
+    
+    .page-title { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+    .page-subtitle { color: var(--muted); margin-bottom: 2rem; }
+    
+    .back-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: none;
+      background: #F3F4F6;
+      color: var(--text);
+      font-size: 0.875rem;
+      cursor: pointer;
+      margin-bottom: 1.5rem;
+    }
+    
+    /* Stats */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    }
+    .stat-label { color: var(--muted); font-size: 0.875rem; }
+    .stat-value { font-size: 2rem; font-weight: 700; margin-top: 0.25rem; }
+    .stat-value.primary { color: var(--primary); }
+    .stat-value.purple { color: var(--primary-dark); }
+    .stat-value.warning { color: var(--warning); }
+    .stat-value.success { color: var(--success); }
+    
+    /* Cards */
+    .card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      margin-bottom: 1.5rem;
+    }
+    .card-title { font-size: 1.125rem; font-weight: 600; margin-bottom: 0.75rem; }
+    
+    /* Page Header with Action */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .page-header-left { }
+    .page-header-right { display: flex; gap: 0.75rem; }
+    
+    /* Items List */
+    .items-list { display: flex; flex-direction: column; gap: 1rem; }
+    .item-card {
+      background: white;
+      border-radius: 16px;
+      padding: 1.25rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      transition: box-shadow 0.2s;
+    }
+    .item-card:hover { box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); }
+    
+    .item-image {
+      width: 80px;
+      height: 80px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #E8E6FF, #F6F5FF);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--primary);
+      font-size: 1.5rem;
+    }
+    .item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 12px;
+    }
+    
+    .item-content { flex: 1; min-width: 0; }
+    .item-title { font-size: 1rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
+    .item-meta { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+    .item-meta-item { font-size: 0.75rem; color: var(--muted); display: flex; align-items: center; gap: 0.25rem; }
+    .item-desc { font-size: 0.875rem; color: var(--muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    
+    .item-attachments {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+      flex-wrap: wrap;
+    }
+    .attachment-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.375rem;
+      padding: 0.375rem 0.75rem;
+      background: #FEE2E2;
+      color: #DC2626;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .attachment-badge:hover { background: #FECACA; }
+    .attachment-badge.link {
+      background: #DBEAFE;
+      color: #2563EB;
+    }
+    .attachment-badge.link:hover { background: #BFDBFE; }
+    
+    .item-actions { display: flex; gap: 0.5rem; flex-shrink: 0; }
+    
+    .item-target {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.25rem 0.625rem;
+      background: #F3F4F6;
+      border-radius: 6px;
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-left: 0.5rem;
+    }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+    .modal {
+      background: white;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+    }
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-title { font-size: 1.25rem; font-weight: 700; }
+    .modal-close {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: none;
+      background: #F3F4F6;
+      cursor: pointer;
+      font-size: 1.25rem;
+      color: var(--muted);
+    }
+    .modal-body { padding: 1.5rem; }
+    .modal-footer {
+      padding: 1rem 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 0.75rem;
+      justify-content: flex-end;
+    }
+    
+    /* File Upload */
+    .file-upload {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+      cursor: pointer;
+      transition: border-color 0.2s, background 0.2s;
+    }
+    .file-upload:hover { border-color: var(--primary); background: #F9FAFB; }
+    .file-upload-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+    .file-upload-text { color: var(--muted); font-size: 0.875rem; }
+    .file-upload-hint { color: #9CA3AF; font-size: 0.75rem; margin-top: 0.25rem; }
+    .file-selected {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      background: #F0FDF4;
+      border-radius: 8px;
+      margin-top: 0.75rem;
+    }
+    .file-selected-icon { color: var(--success); font-size: 1.25rem; }
+    .file-selected-name { flex: 1; font-size: 0.875rem; color: var(--text); }
+    .file-selected-remove {
+      background: none;
+      border: none;
+      color: var(--error);
+      cursor: pointer;
+      font-size: 1.25rem;
+    }
+    
+    /* Form Row */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+    
+    /* Targeting Section */
+    .targeting-section {
+      background: #F9FAFB;
+      border-radius: 12px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+    }
+    .targeting-title { font-size: 0.875rem; font-weight: 600; margin-bottom: 1rem; }
+    .targeting-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+    
+    /* FCM Status */
+    .fcm-status {
+      padding: 0.75rem 1rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+    }
+    .fcm-status.ok { background: #ECFDF5; color: #065F46; }
+    
+    /* Table */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .data-table th {
+      padding: 1rem;
+      text-align: left;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--muted);
+      text-transform: uppercase;
+      background: #F9FAFB;
+    }
+    .data-table td {
+      padding: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 0.375rem 0.75rem;
+      border-radius: 999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+    .tag.pending { background: #FEF3C7; color: #92400E; }
+    .tag.completed { background: #DCFCE7; color: #166534; }
+    .tag.level { background: #E0E7FF; color: #3730A3; }
+    .tag.class { background: #FCE7F3; color: #9D174D; }
+    .tag.all { background: #D1FAE5; color: #065F46; }
+    
+    /* Filter Buttons */
+    .filter-group { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .filter-btn {
+      padding: 0.75rem 1.25rem;
+      border-radius: 12px;
+      border: 2px solid var(--border);
+      background: white;
+      color: var(--text);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .filter-btn.active {
+      border: none;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      color: white;
+    }
+    
+    /* Toast */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 2000;
+      padding: 1rem 1.5rem;
+      border-radius: 12px;
+      color: white;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      animation: slideIn 0.3s ease-out;
+    }
+    .toast.success { background: var(--success); }
+    .toast.error { background: var(--error); }
+    .toast-close { background: none; border: none; color: white; cursor: pointer; font-size: 20px; }
+    
+    @keyframes slideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+    
+    /* Hidden */
+    .hidden { display: none !important; }
+    
+    /* Empty State */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: var(--muted);
+    }
+    .empty-state-icon { font-size: 3rem; margin-bottom: 1rem; opacity: 0.5; }
+    .empty-state-text { font-size: 1rem; margin-bottom: 0.5rem; }
+    .empty-state-hint { font-size: 0.875rem; }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+      .admin-header { flex-direction: column; align-items: flex-start; }
+      .admin-nav { width: 100%; justify-content: flex-start; }
+      .item-card { flex-direction: column; }
+      .item-image { width: 100%; height: 120px; }
+      .item-actions { width: 100%; justify-content: flex-end; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast -->
+  <div id="toast" class="toast hidden">
+    <span id="toast-message"></span>
+    <button class="toast-close" onclick="hideToast()">×</button>
+  </div>
+
+  <!-- Login View -->
+  <div id="login-view" class="login-container">
+    <div class="login-box">
+      <div class="logo"></div>
+      <h1 class="login-title">Back-Office Admin</h1>
+      <p class="login-subtitle">Institution Al Hanane - Application Mobile</p>
+      
+      <form id="login-form">
+        <div class="form-group">
+          <label class="form-label">Nom d'utilisateur</label>
+          <input type="text" id="username" class="form-input" placeholder="admin" required>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Mot de passe</label>
+          <input type="password" id="password" class="form-input" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width: 100%;">Se connecter</button>
+      </form>
+      
+      <p class="login-hint">Identifiants de test: <strong>admin</strong> / <strong>admin123</strong></p>
+    </div>
+  </div>
+
+  <!-- Admin View -->
+  <div id="admin-view" class="admin-container hidden">
+    <!-- Header -->
+    <header class="admin-header">
+      <div class="admin-brand">
+        <div class="admin-logo"></div>
+        <div>
+          <h1 class="admin-title">Back-Office Admin</h1>
+          <p class="admin-subtitle">Build 01 — Notes, Actus, Demandes</p>
+        </div>
+      </div>
+      <nav class="admin-nav">
+        <button class="nav-btn active" data-view="dashboard">Dashboard</button>
+        <button class="nav-btn" data-view="notes">Notes d'info</button>
+        <button class="nav-btn" data-view="news">Actualités</button>
+        <button class="nav-btn" data-view="requests">Demandes</button>
+        <button class="nav-btn logout" onclick="logout()">Déconnexion</button>
+      </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <!-- Dashboard -->
+      <div id="dashboard-view">
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-subtitle">Bienvenue dans le back-office de l'application mobile Al Hanane</p>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <p class="stat-label">Notes d'information</p>
+            <p class="stat-value primary" id="stat-notes">2</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Actualités</p>
+            <p class="stat-value purple" id="stat-news">1</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Demandes en attente</p>
+            <p class="stat-value warning" id="stat-pending">2</p>
+          </div>
+          <div class="stat-card">
+            <p class="stat-label">Demandes traitées</p>
+            <p class="stat-value success" id="stat-completed">1</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Notifications FCM</h2>
+          <p style="color: var(--muted); margin-bottom: 1rem;">
+            Tokens FCM actifs: <strong id="stat-devices">5</strong> appareils enregistrés
+          </p>
+          <div class="fcm-status ok">
+            ✓ FCM configuré - Les notifications seront envoyées aux appareils enregistrés
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">Actions rapides</h2>
+          <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+            <button class="btn btn-primary" onclick="showView('notes')">📝 Gérer les notes</button>
+            <button class="btn btn-primary" onclick="showView('news')">📰 Gérer les actualités</button>
+            <button class="btn btn-secondary" onclick="showView('requests')">📬 Voir les demandes</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes d'information -->
+      <div id="notes-view" class="hidden">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Notes d'information</h1>
+            <p class="page-subtitle" style="margin-bottom: 0;">Gérez les notes envoyées aux parents</p>
+          </div>
+          <div class="page-header-right">
+            <button class="btn btn-primary" onclick="openNoteModal()">
+              <span>+</span> Nouvelle note
+            </button>
+          </div>
+        </div>
+
+        <div id="notes-list" class="items-list">
+          <!-- Dynamic content -->
+        </div>
+      </div>
+
+      <!-- Actualités -->
+      <div id="news-view" class="hidden">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Actualités</h1>
+            <p class="page-subtitle" style="margin-bottom: 0;">Gérez les actualités de l'école</p>
+          </div>
+          <div class="page-header-right">
+            <button class="btn btn-primary" onclick="openNewsModal()">
+              <span>+</span> Nouvelle actualité
+            </button>
+          </div>
+        </div>
+
+        <div id="news-list" class="items-list">
+          <!-- Dynamic content -->
+        </div>
+      </div>
+
+      <!-- Demandes -->
+      <div id="requests-view" class="hidden">
+        <h1 class="page-title">Demandes des parents</h1>
+        <p class="page-subtitle">Gérez les demandes des parents et répondez avec notification FCM</p>
+
+        <div class="filter-group">
+          <button class="filter-btn active" data-filter="pending" onclick="filterRequests('pending')">
+            En attente (<span id="filter-pending">2</span>)
+          </button>
+          <button class="filter-btn" data-filter="completed" onclick="filterRequests('completed')">
+            Traitées (<span id="filter-completed">1</span>)
+          </button>
+          <button class="filter-btn" data-filter="all" onclick="filterRequests('all')">
+            Toutes (<span id="filter-all">3</span>)
+          </button>
+        </div>
+
+        <div class="card" style="overflow-x: auto; padding: 0;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Statut</th>
+                <th>Parent</th>
+                <th>Élève</th>
+                <th>Type</th>
+                <th style="text-align: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody id="requests-table">
+              <!-- Dynamic content -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Reply -->
+      <div id="reply-view" class="hidden">
+        <button class="back-btn" onclick="showView('requests')">← Retour aux demandes</button>
+        <h1 class="page-title" id="reply-title">Demande #1</h1>
+        <p class="page-subtitle">Répondez à cette demande et envoyez une notification FCM au parent</p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+          <div class="card">
+            <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--muted); margin-bottom: 0.75rem;">PARENT</h3>
+            <p style="font-size: 1.125rem; font-weight: 600;" id="reply-parent"></p>
+          </div>
+          <div class="card">
+            <h3 style="font-size: 0.875rem; font-weight: 600; color: var(--muted); margin-bottom: 0.75rem;">ÉLÈVE CONCERNÉ</h3>
+            <p style="font-size: 1.125rem; font-weight: 600;" id="reply-student"></p>
+            <p style="color: var(--muted); font-size: 0.875rem; margin-top: 0.5rem;" id="reply-class"></p>
+          </div>
+        </div>
+
+        <div class="card" style="margin-bottom: 1.5rem;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="font-size: 1rem; font-weight: 600; margin: 0;" id="reply-type"></h3>
+            <span class="tag pending" id="reply-status">En attente</span>
+          </div>
+          <p style="color: var(--text); line-height: 1.6;" id="reply-message"></p>
+        </div>
+
+        <form id="reply-form" class="card">
+          <h3 style="font-size: 1rem; font-weight: 600; margin-bottom: 1rem;">Votre réponse</h3>
+          <div class="form-group">
+            <textarea id="reply-input" class="form-input form-textarea" placeholder="Écrivez votre réponse..." required></textarea>
+          </div>
+          <div style="display: flex; gap: 1rem;">
+            <button type="submit" class="btn btn-success">Envoyer & Notifier le parent</button>
+            <button type="button" class="btn btn-secondary" onclick="showView('requests')">Annuler</button>
+          </div>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <!-- Modal Note -->
+  <div id="note-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="note-modal-title">Nouvelle note d'information</h2>
+        <button class="modal-close" onclick="closeNoteModal()">×</button>
+      </div>
+      <form id="note-form">
+        <div class="modal-body">
+          <div class="form-group">
+            <label class="form-label">Titre *</label>
+            <input type="text" id="note-title" class="form-input" placeholder="Titre de la note..." required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Description *</label>
+            <textarea id="note-desc" class="form-input form-textarea" placeholder="Contenu de la note..." required style="min-height: 150px;"></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Image (URL)</label>
+              <input type="url" id="note-image" class="form-input" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date de publication</label>
+              <input type="datetime-local" id="note-date" class="form-input">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Document PDF</label>
+              <div class="file-upload" onclick="document.getElementById('note-pdf').click()">
+                <div class="file-upload-icon">📄</div>
+                <div class="file-upload-text">Cliquez pour sélectionner un PDF</div>
+                <div class="file-upload-hint">ou glisser-déposer</div>
+              </div>
+              <input type="file" id="note-pdf" accept=".pdf" style="display: none;" onchange="handleFileSelect(this, 'note-pdf-preview')">
+              <div id="note-pdf-preview" class="hidden file-selected">
+                <span class="file-selected-icon">📕</span>
+                <span class="file-selected-name" id="note-pdf-name"></span>
+                <button type="button" class="file-selected-remove" onclick="clearFile('note-pdf', 'note-pdf-preview')">×</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lien internet</label>
+              <input type="url" id="note-link" class="form-input" placeholder="https://example.com">
+            </div>
+          </div>
+
+          <div class="targeting-section">
+            <h3 class="targeting-title">🎯 Ciblage des destinataires</h3>
+            <div class="targeting-grid">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Type de ciblage</label>
+                <select id="note-target" class="form-input form-select" onchange="updateTargeting('note')">
+                  <option value="all">Tous les parents</option>
+                  <option value="level">Par niveau</option>
+                  <option value="class">Par classe</option>
+                </select>
+              </div>
+              <div id="note-level-group" class="form-group hidden" style="margin-bottom: 0;">
+                <label class="form-label">Niveau</label>
+                <select id="note-level" class="form-input form-select">
+                  <option value="">Sélectionner un niveau</option>
+                  <option value="CP">CP - Cours Préparatoire</option>
+                  <option value="CE1">CE1 - Cours Élémentaire 1</option>
+                  <option value="CE2">CE2 - Cours Élémentaire 2</option>
+                  <option value="CM1">CM1 - Cours Moyen 1</option>
+                  <option value="CM2">CM2 - Cours Moyen 2</option>
+                  <option value="6eme">6ème Année</option>
+                </select>
+              </div>
+              <div id="note-class-group" class="form-group hidden" style="margin-bottom: 0;">
+                <label class="form-label">Classe</label>
+                <select id="note-class" class="form-input form-select">
+                  <option value="">Sélectionner une classe</option>
+                  <option value="CP/A">CP/A</option>
+                  <option value="CP/B">CP/B</option>
+                  <option value="CP/C">CP/C</option>
+                  <option value="CE1/A">CE1/A</option>
+                  <option value="CE1/B">CE1/B</option>
+                  <option value="CE2/A">CE2/A</option>
+                  <option value="CE2/B">CE2/B</option>
+                  <option value="CM1/A">CM1/A</option>
+                  <option value="CM1/B">CM1/B</option>
+                  <option value="CM2/A">CM2/A</option>
+                  <option value="CM2/B">CM2/B</option>
+                  <option value="6eme/A">6ème/A</option>
+                </select>
+              </div>
+            </div>
+            <p id="note-fcm-topic" style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--muted);">
+              Topic FCM: <code style="background: #E5E7EB; padding: 0.125rem 0.375rem; border-radius: 4px;">all</code>
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeNoteModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Publier & Notifier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal News -->
+  <div id="news-modal" class="modal-overlay hidden">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="news-modal-title">Nouvelle actualité</h2>
+        <button class="modal-close" onclick="closeNewsModal()">×</button>
+      </div>
+      <form id="news-form">
+        <div class="modal-body">
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Titre *</label>
+              <input type="text" id="news-title" class="form-input" placeholder="Titre de l'actualité..." required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catégorie</label>
+              <select id="news-category" class="form-input form-select">
+                <option value="Information">Information</option>
+                <option value="Événement">Événement</option>
+                <option value="Pédagogie">Pédagogie</option>
+                <option value="Sport">Sport</option>
+                <option value="Culture">Culture</option>
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label class="form-label">Description *</label>
+            <textarea id="news-desc" class="form-input form-textarea" placeholder="Contenu de l'actualité..." required style="min-height: 150px;"></textarea>
+          </div>
+          
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Image (URL)</label>
+              <input type="url" id="news-image" class="form-input" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date de publication</label>
+              <input type="datetime-local" id="news-date" class="form-input">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Document PDF</label>
+              <div class="file-upload" onclick="document.getElementById('news-pdf').click()">
+                <div class="file-upload-icon">📄</div>
+                <div class="file-upload-text">Cliquez pour sélectionner un PDF</div>
+                <div class="file-upload-hint">ou glisser-déposer</div>
+              </div>
+              <input type="file" id="news-pdf" accept=".pdf" style="display: none;" onchange="handleFileSelect(this, 'news-pdf-preview')">
+              <div id="news-pdf-preview" class="hidden file-selected">
+                <span class="file-selected-icon">📕</span>
+                <span class="file-selected-name" id="news-pdf-name"></span>
+                <button type="button" class="file-selected-remove" onclick="clearFile('news-pdf', 'news-pdf-preview')">×</button>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Lien internet</label>
+              <input type="url" id="news-link" class="form-input" placeholder="https://example.com">
+            </div>
+          </div>
+
+          <div class="targeting-section">
+            <h3 class="targeting-title">🎯 Ciblage des destinataires</h3>
+            <div class="targeting-grid">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label">Type de ciblage</label>
+                <select id="news-target" class="form-input form-select" onchange="updateTargeting('news')">
+                  <option value="all">Tous les parents</option>
+                  <option value="level">Par niveau</option>
+                  <option value="class">Par classe</option>
+                </select>
+              </div>
+              <div id="news-level-group" class="form-group hidden" style="margin-bottom: 0;">
+                <label class="form-label">Niveau</label>
+                <select id="news-level" class="form-input form-select">
+                  <option value="">Sélectionner un niveau</option>
+                  <option value="CP">CP - Cours Préparatoire</option>
+                  <option value="CE1">CE1 - Cours Élémentaire 1</option>
+                  <option value="CE2">CE2 - Cours Élémentaire 2</option>
+                  <option value="CM1">CM1 - Cours Moyen 1</option>
+                  <option value="CM2">CM2 - Cours Moyen 2</option>
+                  <option value="6eme">6ème Année</option>
+                </select>
+              </div>
+              <div id="news-class-group" class="form-group hidden" style="margin-bottom: 0;">
+                <label class="form-label">Classe</label>
+                <select id="news-class" class="form-input form-select">
+                  <option value="">Sélectionner une classe</option>
+                  <option value="CP/A">CP/A</option>
+                  <option value="CP/B">CP/B</option>
+                  <option value="CP/C">CP/C</option>
+                  <option value="CE1/A">CE1/A</option>
+                  <option value="CE1/B">CE1/B</option>
+                  <option value="CE2/A">CE2/A</option>
+                  <option value="CE2/B">CE2/B</option>
+                  <option value="CM1/A">CM1/A</option>
+                  <option value="CM1/B">CM1/B</option>
+                  <option value="CM2/A">CM2/A</option>
+                  <option value="CM2/B">CM2/B</option>
+                  <option value="6eme/A">6ème/A</option>
+                </select>
+              </div>
+            </div>
+            <p id="news-fcm-topic" style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--muted);">
+              Topic FCM: <code style="background: #E5E7EB; padding: 0.125rem 0.375rem; border-radius: 4px;">all</code>
+            </p>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" onclick="closeNewsModal()">Annuler</button>
+          <button type="submit" class="btn btn-primary">Publier & Notifier</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Data
+    let data = {
+      infoNotes: [
+        { 
+          id: 1, 
+          title: 'Réunion parents-profs', 
+          description: 'Une réunion parents-profs aura lieu le 15 janvier 2025 à 10h. Votre présence est importante pour le suivi scolaire de votre enfant.', 
+          target_type: 'all',
+          image_url: null,
+          pdf_url: null,
+          link_url: 'https://ecole-alhanane.ma/reunions',
+          published_at: '2025-01-05 14:30'
+        },
+        { 
+          id: 2, 
+          title: 'Sortie scolaire CP', 
+          description: 'Sortie pédagogique au musée prévue pour les classes de CP le 20 janvier. Veuillez signer l\'autorisation jointe en pièce attachée.', 
+          target_type: 'level',
+          level: 'CP',
+          image_url: 'https://images.unsplash.com/photo-1580582932707-520aed937b7b?w=200',
+          pdf_url: '/uploads/autorisation_sortie_cp.pdf',
+          link_url: null,
+          published_at: '2025-01-06 09:00'
+        },
+        { 
+          id: 3, 
+          title: 'Inscription activités périscolaires', 
+          description: 'Les inscriptions pour les activités périscolaires du second semestre sont ouvertes. Consultez le programme et inscrivez vos enfants avant le 25 janvier.', 
+          target_type: 'class',
+          level: 'CE1',
+          class: 'CE1/A',
+          image_url: null,
+          pdf_url: '/uploads/programme_periscolaire.pdf',
+          link_url: 'https://ecole-alhanane.ma/activites',
+          published_at: '2025-01-07 10:00'
+        }
+      ],
+      news: [
+        { 
+          id: 1, 
+          title: 'Fête de fin d\'année', 
+          description: 'L\'école organise une grande fête de fin d\'année avec spectacles et animations le 28 juin. Tous les parents sont invités à y participer.', 
+          category: 'Événement',
+          target_type: 'all',
+          image_url: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=200',
+          pdf_url: null,
+          link_url: null,
+          published_at: '2025-01-04 16:00'
+        },
+        { 
+          id: 2, 
+          title: 'Résultats concours de lecture', 
+          description: 'Félicitations à tous les participants du concours de lecture ! Les résultats sont disponibles en pièce jointe.', 
+          category: 'Pédagogie',
+          target_type: 'all',
+          image_url: null,
+          pdf_url: '/uploads/resultats_lecture.pdf',
+          link_url: null,
+          published_at: '2025-01-08 11:00'
+        }
+      ],
+      requests: [
+        { id: 1, parent: 'Ahmed Benali', student: 'Karim Benali', studentClass: 'CP/A', type: 'attestation', message: 'J\'ai besoin d\'une attestation d\'inscription pour mon fils pour la banque.', status: 'pending' },
+        { id: 2, parent: 'Fatima Zahra', student: 'Omar Zahra', studentClass: 'CE1/A', type: 'certificat', message: 'Certificat de scolarité demandé pour inscription sportive.', status: 'completed' },
+        { id: 3, parent: 'Mohammed Alami', student: 'Lina Alami', studentClass: 'CE2/A', type: 'facture', message: 'Facture de décembre manquante, merci de me la renvoyer.', status: 'pending' }
+      ],
+      devices: 5,
+      currentFilter: 'pending',
+      selectedRequest: null,
+      editingNote: null,
+      editingNews: null
+    };
+
+    const typeLabels = {
+      attestation: 'Attestation',
+      facture: 'Facture',
+      certificat: 'Certificat',
+      autre: 'Autre'
+    };
+
+    // Toast
+    function showToast(message, type = 'success') {
+      const toast = document.getElementById('toast');
+      const msg = document.getElementById('toast-message');
+      toast.className = `toast ${type}`;
+      msg.textContent = message;
+      setTimeout(() => hideToast(), 4000);
+    }
+
+    function hideToast() {
+      document.getElementById('toast').classList.add('hidden');
+    }
+
+    // Views
+    function showView(view) {
+      const views = ['dashboard', 'notes', 'news', 'requests', 'reply'];
+      views.forEach(v => {
+        const el = document.getElementById(`${v}-view`);
+        if (el) el.classList.toggle('hidden', v !== view);
+      });
+      
+      // Update nav
+      document.querySelectorAll('.nav-btn[data-view]').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.view === view);
+      });
+      
+      if (view === 'requests') renderRequests();
+      if (view === 'notes') renderNotes();
+      if (view === 'news') renderNews();
+    }
+
+    // Login
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+      
+      if (username === 'admin' && password === 'admin123') {
+        document.getElementById('login-view').classList.add('hidden');
+        document.getElementById('admin-view').classList.remove('hidden');
+        showToast('Connexion réussie !', 'success');
+        updateStats();
+        renderNotes();
+        renderNews();
+        renderRequests();
+      } else {
+        showToast('Identifiants incorrects. Utilisez admin / admin123', 'error');
+      }
+    });
+
+    function logout() {
+      document.getElementById('admin-view').classList.add('hidden');
+      document.getElementById('login-view').classList.remove('hidden');
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+    }
+
+    // Stats
+    function updateStats() {
+      document.getElementById('stat-notes').textContent = data.infoNotes.length;
+      document.getElementById('stat-news').textContent = data.news.length;
+      document.getElementById('stat-pending').textContent = data.requests.filter(r => r.status === 'pending').length;
+      document.getElementById('stat-completed').textContent = data.requests.filter(r => r.status === 'completed').length;
+      document.getElementById('stat-devices').textContent = data.devices;
+      
+      document.getElementById('filter-pending').textContent = data.requests.filter(r => r.status === 'pending').length;
+      document.getElementById('filter-completed').textContent = data.requests.filter(r => r.status === 'completed').length;
+      document.getElementById('filter-all').textContent = data.requests.length;
+    }
+
+    // Targeting
+    function updateTargeting(form) {
+      const target = document.getElementById(`${form}-target`).value;
+      const levelGroup = document.getElementById(`${form}-level-group`);
+      const classGroup = document.getElementById(`${form}-class-group`);
+      const topicEl = document.getElementById(`${form}-fcm-topic`);
+      
+      levelGroup.classList.toggle('hidden', target === 'all');
+      classGroup.classList.toggle('hidden', target !== 'class');
+      
+      // Update FCM topic display
+      let topic = 'all';
+      if (target === 'level') {
+        const level = document.getElementById(`${form}-level`).value;
+        topic = level ? `level.${level}` : 'level...';
+      } else if (target === 'class') {
+        const cls = document.getElementById(`${form}-class`).value;
+        topic = cls ? `class.${cls.replace('/', '.')}` : 'class...';
+      }
+      topicEl.innerHTML = `Topic FCM: <code style="background: #E5E7EB; padding: 0.125rem 0.375rem; border-radius: 4px;">${topic}</code>`;
+    }
+
+    // File handling
+    function handleFileSelect(input, previewId) {
+      const preview = document.getElementById(previewId);
+      const nameEl = document.getElementById(input.id + '-name');
+      
+      if (input.files && input.files[0]) {
+        nameEl.textContent = input.files[0].name;
+        preview.classList.remove('hidden');
+      }
+    }
+
+    function clearFile(inputId, previewId) {
+      document.getElementById(inputId).value = '';
+      document.getElementById(previewId).classList.add('hidden');
+    }
+
+    // ========== NOTES ==========
+    function renderNotes() {
+      const container = document.getElementById('notes-list');
+      
+      if (data.infoNotes.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📝</div>
+            <div class="empty-state-text">Aucune note d'information</div>
+            <div class="empty-state-hint">Cliquez sur "Nouvelle note" pour créer une note</div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = data.infoNotes.map(note => `
+        <div class="item-card">
+          <div class="item-image">
+            ${note.image_url 
+              ? `<img src="${note.image_url}" alt="${note.title}">` 
+              : '📝'}
+          </div>
+          <div class="item-content">
+            <div class="item-title">
+              ${note.title}
+              <span class="item-target ${note.target_type}">${getTargetLabel(note)}</span>
+            </div>
+            <div class="item-meta">
+              <span class="item-meta-item">📅 ${formatDate(note.published_at)}</span>
+              <span class="item-meta-item">🔔 Notifié</span>
+            </div>
+            <div class="item-desc">${note.description}</div>
+            <div class="item-attachments">
+              ${note.pdf_url ? `<a href="${note.pdf_url}" class="attachment-badge" target="_blank">📕 PDF joint</a>` : ''}
+              ${note.link_url ? `<a href="${note.link_url}" class="attachment-badge link" target="_blank">🔗 Lien</a>` : ''}
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-sm btn-secondary" onclick="editNote(${note.id})">✏️ Modifier</button>
+            <button class="btn btn-sm btn-icon" onclick="deleteNote(${note.id})" title="Supprimer">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function getTargetLabel(item) {
+      if (item.target_type === 'all') return 'Tous';
+      if (item.target_type === 'level') return item.level;
+      if (item.target_type === 'class') return item.class || item.level;
+      return '';
+    }
+
+    function formatDate(dateStr) {
+      const date = new Date(dateStr);
+      return date.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+
+    function openNoteModal(id = null) {
+      data.editingNote = id;
+      const modal = document.getElementById('note-modal');
+      const title = document.getElementById('note-modal-title');
+      
+      if (id) {
+        const note = data.infoNotes.find(n => n.id === id);
+        title.textContent = 'Modifier la note';
+        document.getElementById('note-title').value = note.title;
+        document.getElementById('note-desc').value = note.description;
+        document.getElementById('note-image').value = note.image_url || '';
+        document.getElementById('note-link').value = note.link_url || '';
+        document.getElementById('note-target').value = note.target_type;
+        if (note.level) document.getElementById('note-level').value = note.level;
+        if (note.class) document.getElementById('note-class').value = note.class;
+        updateTargeting('note');
+      } else {
+        title.textContent = 'Nouvelle note d\'information';
+        document.getElementById('note-form').reset();
+        document.getElementById('note-target').value = 'all';
+        document.getElementById('note-pdf-preview').classList.add('hidden');
+        updateTargeting('note');
+      }
+      
+      modal.classList.remove('hidden');
+    }
+
+    function closeNoteModal() {
+      document.getElementById('note-modal').classList.add('hidden');
+      data.editingNote = null;
+    }
+
+    function editNote(id) {
+      openNoteModal(id);
+    }
+
+    function deleteNote(id) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette note ?')) {
+        data.infoNotes = data.infoNotes.filter(n => n.id !== id);
+        updateStats();
+        renderNotes();
+        showToast('Note supprimée', 'success');
+      }
+    }
+
+    document.getElementById('note-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const noteData = {
+        id: data.editingNote || Date.now(),
+        title: document.getElementById('note-title').value,
+        description: document.getElementById('note-desc').value,
+        image_url: document.getElementById('note-image').value || null,
+        link_url: document.getElementById('note-link').value || null,
+        pdf_url: document.getElementById('note-pdf').files[0]?.name ? `/uploads/${document.getElementById('note-pdf').files[0].name}` : null,
+        target_type: document.getElementById('note-target').value,
+        level: document.getElementById('note-level').value || null,
+        class: document.getElementById('note-class').value || null,
+        published_at: document.getElementById('note-date').value || new Date().toISOString()
+      };
+      
+      if (data.editingNote) {
+        const index = data.infoNotes.findIndex(n => n.id === data.editingNote);
+        data.infoNotes[index] = noteData;
+        showToast('Note modifiée !', 'success');
+      } else {
+        data.infoNotes.unshift(noteData);
+        showToast('Note publiée ! Notification FCM envoyée.', 'success');
+      }
+      
+      closeNoteModal();
+      updateStats();
+      renderNotes();
+    });
+
+    // ========== NEWS ==========
+    function renderNews() {
+      const container = document.getElementById('news-list');
+      
+      if (data.news.length === 0) {
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📰</div>
+            <div class="empty-state-text">Aucune actualité</div>
+            <div class="empty-state-hint">Cliquez sur "Nouvelle actualité" pour créer une actualité</div>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = data.news.map(item => `
+        <div class="item-card">
+          <div class="item-image">
+            ${item.image_url 
+              ? `<img src="${item.image_url}" alt="${item.title}">` 
+              : '📰'}
+          </div>
+          <div class="item-content">
+            <div class="item-title">
+              ${item.title}
+              <span class="item-target all">${item.category}</span>
+              <span class="item-target ${item.target_type}">${getTargetLabel(item)}</span>
+            </div>
+            <div class="item-meta">
+              <span class="item-meta-item">📅 ${formatDate(item.published_at)}</span>
+              <span class="item-meta-item">🔔 Notifié</span>
+            </div>
+            <div class="item-desc">${item.description}</div>
+            <div class="item-attachments">
+              ${item.pdf_url ? `<a href="${item.pdf_url}" class="attachment-badge" target="_blank">📕 PDF joint</a>` : ''}
+              ${item.link_url ? `<a href="${item.link_url}" class="attachment-badge link" target="_blank">🔗 Lien</a>` : ''}
+            </div>
+          </div>
+          <div class="item-actions">
+            <button class="btn btn-sm btn-secondary" onclick="editNews(${item.id})">✏️ Modifier</button>
+            <button class="btn btn-sm btn-icon" onclick="deleteNews(${item.id})" title="Supprimer">🗑️</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function openNewsModal(id = null) {
+      data.editingNews = id;
+      const modal = document.getElementById('news-modal');
+      const title = document.getElementById('news-modal-title');
+      
+      if (id) {
+        const item = data.news.find(n => n.id === id);
+        title.textContent = 'Modifier l\'actualité';
+        document.getElementById('news-title').value = item.title;
+        document.getElementById('news-desc').value = item.description;
+        document.getElementById('news-category').value = item.category;
+        document.getElementById('news-image').value = item.image_url || '';
+        document.getElementById('news-link').value = item.link_url || '';
+        document.getElementById('news-target').value = item.target_type;
+        if (item.level) document.getElementById('news-level').value = item.level;
+        if (item.class) document.getElementById('news-class').value = item.class;
+        updateTargeting('news');
+      } else {
+        title.textContent = 'Nouvelle actualité';
+        document.getElementById('news-form').reset();
+        document.getElementById('news-target').value = 'all';
+        document.getElementById('news-pdf-preview').classList.add('hidden');
+        updateTargeting('news');
+      }
+      
+      modal.classList.remove('hidden');
+    }
+
+    function closeNewsModal() {
+      document.getElementById('news-modal').classList.add('hidden');
+      data.editingNews = null;
+    }
+
+    function editNews(id) {
+      openNewsModal(id);
+    }
+
+    function deleteNews(id) {
+      if (confirm('Êtes-vous sûr de vouloir supprimer cette actualité ?')) {
+        data.news = data.news.filter(n => n.id !== id);
+        updateStats();
+        renderNews();
+        showToast('Actualité supprimée', 'success');
+      }
+    }
+
+    document.getElementById('news-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const newsData = {
+        id: data.editingNews || Date.now(),
+        title: document.getElementById('news-title').value,
+        description: document.getElementById('news-desc').value,
+        category: document.getElementById('news-category').value,
+        image_url: document.getElementById('news-image').value || null,
+        link_url: document.getElementById('news-link').value || null,
+        pdf_url: document.getElementById('news-pdf').files[0]?.name ? `/uploads/${document.getElementById('news-pdf').files[0].name}` : null,
+        target_type: document.getElementById('news-target').value,
+        level: document.getElementById('news-level').value || null,
+        class: document.getElementById('news-class').value || null,
+        published_at: document.getElementById('news-date').value || new Date().toISOString()
+      };
+      
+      if (data.editingNews) {
+        const index = data.news.findIndex(n => n.id === data.editingNews);
+        data.news[index] = newsData;
+        showToast('Actualité modifiée !', 'success');
+      } else {
+        data.news.unshift(newsData);
+        showToast('Actualité publiée ! Notification FCM envoyée.', 'success');
+      }
+      
+      closeNewsModal();
+      updateStats();
+      renderNews();
+    });
+
+    // ========== REQUESTS ==========
+    function renderRequests() {
+      const filtered = data.currentFilter === 'all' 
+        ? data.requests 
+        : data.requests.filter(r => r.status === data.currentFilter);
+      
+      const tbody = document.getElementById('requests-table');
+      tbody.innerHTML = filtered.map(r => `
+        <tr>
+          <td><strong>#${r.id}</strong></td>
+          <td><span class="tag ${r.status}">${r.status === 'completed' ? 'Traité' : 'En attente'}</span></td>
+          <td>${r.parent}</td>
+          <td>${r.student}<br><small style="color: var(--muted)">${r.studentClass}</small></td>
+          <td>${typeLabels[r.type]}</td>
+          <td style="text-align: right;">
+            <button class="btn btn-sm btn-primary" onclick="showReply(${r.id})">
+              ${r.status === 'completed' ? 'Voir' : 'Répondre'}
+            </button>
+          </td>
+        </tr>
+      `).join('') || '<tr><td colspan="6" style="text-align: center; color: var(--muted); padding: 3rem;">Aucune demande trouvée</td></tr>';
+    }
+
+    function filterRequests(filter) {
+      data.currentFilter = filter;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.filter === filter);
+      });
+      renderRequests();
+    }
+
+    function showReply(id) {
+      const req = data.requests.find(r => r.id === id);
+      if (!req) return;
+      
+      data.selectedRequest = id;
+      
+      document.getElementById('reply-title').textContent = `Demande #${req.id}`;
+      document.getElementById('reply-parent').textContent = req.parent;
+      document.getElementById('reply-student').textContent = req.student;
+      document.getElementById('reply-class').textContent = `Classe: ${req.studentClass}`;
+      document.getElementById('reply-type').textContent = `Demande: ${typeLabels[req.type]}`;
+      document.getElementById('reply-message').textContent = req.message;
+      document.getElementById('reply-status').textContent = req.status === 'completed' ? 'Traité' : 'En attente';
+      document.getElementById('reply-status').className = `tag ${req.status}`;
+      
+      document.getElementById('reply-form').style.display = req.status === 'pending' ? 'block' : 'none';
+      document.getElementById('reply-input').value = '';
+      
+      showView('reply');
+    }
+
+    document.getElementById('reply-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const message = document.getElementById('reply-input').value;
+      if (!message.trim()) return;
+      
+      const req = data.requests.find(r => r.id === data.selectedRequest);
+      if (req) {
+        req.status = 'completed';
+        updateStats();
+        showToast('Réponse envoyée ! Notification FCM envoyée au parent.', 'success');
+        showView('requests');
+      }
+    });
+
+    // Nav buttons
+    document.querySelectorAll('.nav-btn[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => showView(btn.dataset.view));
+    });
+
+    // Close modal on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.add('hidden');
+        }
+      });
+    });
+
+    // Init
+    updateStats();
+  </script>
+</body>
+</html>
