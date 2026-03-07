@@ -1,0 +1,62 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+.dyad/
+
+# Archives ZIP
+*.zip
+
+# Scripts de création d'archive
+create-archive.js
+create-zip.js
+create-zip.sh
+create-zip.bat
+create-zip.ps1
+create-zip-fixed.cjs
+create_zip.py
+create-vps-zip.js
+generate-zip.js
+make-zip.js
+run-create-zip.js
+execute-zip.js
+execute-zip.cjs
+test-zip.cjs
+
+# Fichiers de déploiement temporaires
+node
+test-server.php
+
+# Documentation inutile
+TELECHARGEMENT.md
+GUIDE_DEPLOIEMENT.md
+README_DEPLOIEMENT.md
+README_MODE_API.md
+
+# Docker (optionnel)
+docker-compose.yml
+Dockerfile
+Dockerfile.php
+
+# Backend dupliqué
+backend/

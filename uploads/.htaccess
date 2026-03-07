@@ -1,0 +1,12 @@
+# Prevent executing scripts from uploads
+<FilesMatch "\.(php|phtml|phar|php[0-9])$">
+  Deny from all
+</FilesMatch>
+
+# Force safe types
+AddType application/pdf .pdf
+AddType image/jpeg .jpg .jpeg
+AddType image/png .png
+AddType image/webp .webp
+
+Options -Indexes

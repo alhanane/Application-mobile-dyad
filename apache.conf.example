@@ -1,0 +1,78 @@
+# Configuration Apache pour le projet mobile sur Ubuntu 22
+# Placez ce fichier dans /etc/apache2/sites-available/mobile.conf
+# Puis activez le site: sudo a2ensite mobile.conf
+
+<VirtualHost *:80>
+    ServerName votre-domaine.com
+    DocumentRoot /var/www/mobile
+
+    # Redirection HTTP vers HTTPS
+    Redirect permanent / https://votre-domaine.com/
+</VirtualHost>
+
+<VirtualHost *:443>
+    ServerName votre-domaine.com
+    DocumentRoot /var/www/mobile
+
+    # Certificat SSL (Let's Encrypt)
+    SSLEngine on
+    SSLCertificateFile /etc/letsencrypt/live/votre-domaine.com/fullchain.pem
+    SSLCertificateKeyFile /etc/letsencrypt/live/votre-domaine.com/privkey.pem
+    SSLProtocol all -SSLv3 -TLSv1 -TLSv1.1
+    SSLCipherSuite HIGH:!aNULL:!MD5
+
+    # Logs
+    ErrorLog ${APACHE_LOG_DIR}/mobile_error.log
+    CustomLog ${APACHE_LOG_DIR}/mobile_access.log combined
+
+    # Headers de sécurité
+    Header always set X-Frame-Options "SAMEORIGIN"
+    Header always set X-Content-Type-Options "nosniff"
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+
+    # Frontend React
+    <Directory /var/www/mobile>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+
+        # Rewrite rules pour React Router
+        RewriteEngine On
+        RewriteBase /
+        RewriteRule ^index\.html$ - [L]
+        RewriteCond %{REQUEST_FILENAME} !-f
+        RewriteCond %{REQUEST_FILENAME} !-d
+        RewriteRule . /index.html [L]
+    </Directory>
+
+    # Backend PHP API
+    <Directory /var/www/mobile/api>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    # Panel Admin PHP
+    <Directory /var/www/mobile/admin>
+        Options -Indexes +FollowSymLinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+
+    # Dossier uploads
+    <Directory /var/www/mobile/uploads>
+        Options -Indexes +FollowSymLinks
+        AllowOverride None
+        Require all granted
+    </Directory>
+
+    # Interdire l'accès aux fichiers sensibles
+    <DirectoryMatch "^/(config|lib|db)/">
+        Require all denied
+    </DirectoryMatch>
+
+    <FilesMatch "\.(log|sql)$">
+        Require all denied
+    </FilesMatch>
+</VirtualHost>

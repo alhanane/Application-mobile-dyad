@@ -1,0 +1,12 @@
+# Protéger le dossier lib contre l'accès direct
+
+<FilesMatch "\.(php|inc|txt|ini|log)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Interdire l'accès à tous les fichiers
+<Files "*">
+    Order Allow,Deny
+    Deny from all
+</Files>

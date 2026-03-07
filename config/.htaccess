@@ -1,0 +1,17 @@
+# Protéger le dossier config contre l'accès direct
+
+<FilesMatch "\.(php|json|txt|ini|log)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Interdire l'accès à tous les fichiers
+<Files "*">
+    Order Allow,Deny
+    Deny from all
+</Files>
+
+# Autoriser uniquement l'accès depuis localhost (si nécessaire pour les includes)
+# <IfModule mod_authz_core.c>
+#     Require ip 127.0.0.1
+# </IfModule>
